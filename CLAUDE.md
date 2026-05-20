@@ -90,10 +90,6 @@ For each slide:
 
 ### 4. Cleanup
 
-```javascript
-mcp__playwright__browser_close()
-```
-
 Optionally ask: "Keep `slides/<project-name>/` for future edits, or delete?"
 
 ---
@@ -121,61 +117,51 @@ styleguide.md            # Full design system reference
 
 ## Technical: Figma Import
 
-Slides are captured via headless browser and imported to Figma using the `generate_figma_design` tool from the **remote Figma MCP server**.
+Slides are imported to Figma using the `use_figma` tool from the Figma MCP server. This tool executes JavaScript via the Figma Plugin API.
 
-Docs: https://developers.figma.com/docs/figma-mcp-server/tools-and-prompts/#generate_figma_design
+### Per-slide Import
 
-**Important**: All generated slides must include the Figma capture script in `<head>`:
-```html
-<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
-```
-
-### Per-slide Capture
-
-**CRITICAL: All slides MUST be captured at exactly 1920x1080 pixels.** Use Playwright with explicit viewport sizing—never use `open` command with hash URLs as it uses the system browser's default viewport.
+Build each slide programmatically using Figma's auto-layout system:
 
 ```javascript
-// 1. Generate capture ID
-const { captureId } = generate_figma_design({
-  outputMode: "existingFile",
-  fileKey: "<file-key>"
-})
+use_figma({
+  fileKey: "<file-key>",
+  code: `
+    // Load fonts
+    await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+    await figma.loadFontAsync({ family: "Inter", style: "Medium" });
+    await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+    await figma.loadFontAsync({ family: "Inter", style: "Bold" });
 
-// 2. Set viewport to EXACTLY 1920x1080 (MANDATORY)
-mcp__playwright__browser_resize({
-  width: 1920,
-  height: 1080
-})
+    // Create 1920x1080 slide frame with auto-layout
+    const slide = figma.createFrame();
+    slide.name = "Slide Name";
+    slide.resize(1920, 1080);
+    slide.layoutMode = "VERTICAL";
+    slide.primaryAxisSizingMode = "FIXED";
+    slide.counterAxisSizingMode = "FIXED";
+    slide.paddingTop = 64; slide.paddingBottom = 64;
+    slide.paddingLeft = 64; slide.paddingRight = 64;
+    slide.itemSpacing = 0;
+    slide.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
 
-// 3. Navigate to slide
-mcp__playwright__browser_navigate({
-  url: "http://localhost:8080/slides/<project>/slide.html"
-})
+    // IMPORTANT: append child BEFORE setting layoutSizing
+    slide.appendChild(child);
+    child.layoutSizingHorizontal = "FILL";
+    child.layoutSizingVertical = "FILL";
 
-// 4. Wait for page to fully render
-mcp__playwright__browser_wait_for({ time: 1 })
-
-// 5. Trigger capture
-mcp__playwright__browser_run_code({
-  code: `async (page) => {
-    await page.evaluate(() => {
-      window.figma.captureForDesign({
-        captureId: '<capture-id>',
-        endpoint: 'https://mcp.figma.com/mcp/capture/<capture-id>/submit',
-        selector: 'body'
-      });
-    });
-    return 'triggered';
-  }`
-})
-
-// 6. Poll for completion
-generate_figma_design({
-  captureId: "<capture-id>",
-  outputMode: "existingFile",
-  fileKey: "<file-key>"
+    // Use figma.createNodeFromSvg(svgString) for icons
+  `
 })
 ```
+
+**Key patterns:**
+- Always use auto-layout, never absolute positioning
+- Append child to parent BEFORE setting `layoutSizingHorizontal/Vertical`
+- Use `primaryAxisSizingMode = "FIXED"` to prevent height collapse
+- Use spacer frames with `layoutSizingVertical = "FILL"` to push content down
+- Use `figma.createNodeFromSvg()` for inline SVG icons
+- Font gotcha: "Semi Bold" has a space (not "SemiBold")
 
 ---
 
@@ -195,9 +181,14 @@ Label:       18-20px, 600 weight  /* Tags, badges */
 Caption:     16-18px (minimal use)
 
 /* Colors */
-Background: #F4F4F5    Text Primary: #111827
+Background: #FFFFFF    Text Primary: #111827
 Surface:    #FFFFFF    Text Secondary: #6B7280
-Accent:     #456AFC    Border: #E5E7EB
+Border:     #E5E7EB
+
+/* Pastel Accents (use for text highlights, decorative elements) */
+Accent Beige:    #F0EBE3    Accent Sage:     #D4DDD6
+Accent Lavender: #D5D0E5    Accent Gray:     #E3E0DB
+Accent Dark:     #1F2024
 
 /* Layout */
 Canvas: 1920 x 1080px

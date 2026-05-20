@@ -13,7 +13,7 @@ Generate presentation slides by selecting and filling existing templates. This i
 2. **Research content** - Read `knowledge/index.md`, fetch docs if needed
 3. **Select templates** - Match content to appropriate template
 4. **Generate HTML** - Fill template with content, save to `slides/<client>/`
-5. **Import to Figma** - Use Playwright capture workflow (see CLAUDE.md)
+5. **Import to Figma** - Use `use_figma` Plugin API (see CLAUDE.md)
 
 ---
 
@@ -82,8 +82,8 @@ When creating multiple slides:
 1. **Start server once**: `npx http-server . -p 8080 &`
 2. **Ask Figma destination once**: Let user pick file
 3. **Create all slides**: Write HTML files
-4. **Batch capture**: Generate capture IDs, run Playwright for each
-5. **Cleanup**: Close browser when done
+4. **Batch import**: Use `use_figma` to create each slide in Figma
+5. **Verify**: Use `get_screenshot` to check each slide
 
 ---
 

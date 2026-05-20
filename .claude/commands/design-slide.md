@@ -81,8 +81,8 @@ Prefer flowing, organic layouts over rigid card-based grids.
 ### Solid Lines (flow diagrams)
 ```css
 /* Flow arrow (blue) */
-<path d="M 50 0 L 50 40" stroke="#456AFC" stroke-width="2" fill="none"/>
-<polygon points="50,50 45,40 55,40" fill="#456AFC"/>
+<path d="M 50 0 L 50 40" stroke="#4D65FF" stroke-width="2" fill="none"/>
+<polygon points="50,50 45,40 55,40" fill="#4D65FF"/>
 
 /* Node connector (light gray) */
 <path d="M 380 360 C 480 420, 620 420, 720 360"
@@ -94,7 +94,7 @@ Prefer flowing, organic layouts over rigid card-based grids.
 | Line Type | Use For | Color |
 |-----------|---------|-------|
 | Dashed gray | Info boxes, annotations | `#c0c0c0` |
-| Solid blue | Flow arrows | `#456AFC` |
+| Solid blue | Flow arrows | `#4D65FF` |
 | Solid light gray | Node connections | `#e0e0e0` |
 
 ---
@@ -117,7 +117,7 @@ Start every custom slide with this structure:
       font-family: 'Inter', sans-serif;
       width: 1920px;
       height: 1080px;
-      background: #f8f8f9;
+      background: #FFFFFF;
       padding: 64px;
       position: relative;
       -webkit-font-smoothing: antialiased;
@@ -138,13 +138,16 @@ Start every custom slide with this structure:
 
 ```css
 /* Colors */
---background: #f8f8f9;
---background-elevated: #ededee;
---text-primary: #121420;
---text-secondary: #717279;
---accent: #456AFC;
---surface-white: #ffffff;
---surface-dark: #242631;
+--background: #FFFFFF;
+--background-elevated: #F0EBE3;
+--text-primary: #111827;
+--text-secondary: #6B7280;
+--accent-beige: #F0EBE3;
+--accent-sage: #D4DDD6;
+--accent-lavender: #D5D0E5;
+--accent-gray: #E3E0DB;
+--accent-dark: #1F2024;
+--surface-white: #FFFFFF;
 
 /* Typography */
 .headline-1 {
@@ -183,7 +186,7 @@ Margins: 64px all sides
 4. **Build incrementally** - Add elements, test in browser
 5. **Use design tokens** - Keep colors/typography consistent
 6. **Reference existing templates** - Borrow patterns that work
-7. **Save and capture** - Same Figma workflow as templates
+7. **Import to Figma** - Use `use_figma` Plugin API (see CLAUDE.md)
 
 ---
 

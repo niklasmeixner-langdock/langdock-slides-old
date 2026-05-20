@@ -28,15 +28,18 @@ body {
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| Background | `#F4F4F5` | Slide background |
+| Background | `#FFFFFF` | Slide background |
 | Surface | `#FFFFFF` | Cards, containers |
 | Text Primary | `#111827` | Headlines, important text |
 | Text Secondary | `#6B7280` | Body text, descriptions |
 | Text Muted | `#9CA3AF` | Labels, captions |
 | Border | `#E5E7EB` | Card borders, dividers |
-| Accent | `#456AFC` | Brand blue, highlights |
-| Accent Dark | `#1F2937` | Dark tags, badges |
-| Teal | `#0D9488` | Success, REQUIRED badges |
+| Accent Blue | `#4D65FF` | Brand blue, primary accent |
+| Accent Beige | `#F0EBE3` | Warm pastel accent |
+| Accent Sage | `#D4DDD6` | Green pastel accent |
+| Accent Lavender | `#D5D0E5` | Purple pastel accent |
+| Accent Gray | `#E3E0DB` | Warm gray accent |
+| Accent Dark | `#1F2024` | Dark cards, badges |
 | Code Background | `#1E293B` | Code blocks |
 
 ### Typography
